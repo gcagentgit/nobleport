@@ -1,0 +1,13 @@
+.git
+.github
+.venv
+__pycache__
+*.pyc
+*.pyo
+tests
+nobleport.db
+.env
+.env.local
+.pytest_cache
+reports
+scripts

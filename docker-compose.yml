@@ -1,0 +1,47 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: nobleport
+      POSTGRES_PASSWORD: nobleport
+      POSTGRES_DB: nobleport
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nobleport -d nobleport"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://nobleport:nobleport@postgres:5432/nobleport
+      REDIS_URL: redis://redis:6379/0
+      AGENT_EVENT_CHANNEL: agent.events
+      SANDBOX_ALLOWED_COMMANDS: pytest,flake8
+      SANDBOX_TIMEOUT_SECONDS: "60"
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata: {}
