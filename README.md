@@ -24,14 +24,47 @@ This repo runs a production supervisor with strict audit-first governance:
 
 ## Endpoints
 
+### Supervisor
+
 | Method | Path                         | Purpose                                  |
 |--------|------------------------------|------------------------------------------|
 | GET    | `/health`                    | Liveness + checkpoint-backend identifier |
-| GET    | `/ready`                     | Verifies DB and (when configured) Redis  |
+| GET    | `/ready`                     | DB + Redis (if set) + kill switch off    |
 | POST   | `/agent/invoke`              | Audit-first invocation                   |
 | GET    | `/agent/status/{thread_id}`  | Last-known status / kill flag            |
 | POST   | `/agent/kill/{thread_id}`    | Cooperative cancellation request         |
-| GET    | `/metrics/gates`             | Latency summary (p50/p95/count)          |
+| GET    | `/metrics/latency`           | Agent latency p50/p95/count              |
+
+### Stephanie.ai Live Voice Launch Gate v1
+
+| Method | Path                            | Purpose                                                   |
+|--------|---------------------------------|-----------------------------------------------------------|
+| GET    | `/metrics/gates`                | voice/avatar/websocket/audit_log/database/kill_switch     |
+| POST   | `/session`                      | Start a voice session                                     |
+| GET    | `/session/{session_id}`         | Fetch session state                                       |
+| POST   | `/session/{session_id}/end`     | End a session                                             |
+| POST   | `/message`                      | Exchange one message; logs transcript + audit chain       |
+| GET    | `/audit`                        | List + verify audit hash chain                            |
+| POST   | `/avatar/state/{session_id}`    | Update avatar state (idle/speaking/listening/error/fallback) |
+| POST   | `/voice/fallback/{session_id}`  | Engage text-mode fallback for a session                   |
+| GET    | `/voice/kill-switch`            | Read launch kill switch                                   |
+| POST   | `/voice/kill-switch`            | Engage / disengage launch kill switch                     |
+| WS     | `/voice/ws/{session_id}`        | Bidirectional voice/text channel                          |
+
+Launch rule: `GET /metrics/gates` returns each gate as `PASS`, `DEGRADED`,
+or `FAIL`. `PASS` is reserved for fully configured + verifiable
+capabilities; missing integrations return `DEGRADED` or `FAIL` with a
+concrete reason in `detail.<gate>.reason`. The smoke script enforces this:
+
+```bash
+python scripts/launch_gate_smoke.py --base-url https://api.nobleport.net
+# exit 0 = LAUNCH READY, all gates PASS
+# exit 1 = NOT LAUNCH READY (DEGRADED, FAIL, or unreachable)
+# exit 2 = invalid response shape (launch-blocking)
+```
+
+Required env vars for `PASS` on each gate are documented in
+`.env.example`.
 
 ## Configuration
 
