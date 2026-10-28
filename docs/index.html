@@ -1,0 +1,954 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>DesignAgent.ai — 150 Skills for NoblePort</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{
+    --ground:#F4F2E9;
+    --panel:#EDEADD;
+    --ink:#26241C;
+    --ink-soft:#5C594B;
+    --line:#CFC9B4;
+    --line-soft:#DEDACA;
+    --fern:#3E5C40;
+    --fern-deep:#2E4630;
+    --moss:#6B7F58;
+    --clay:#B85F33;
+    --clay-soft:#D9B29A;
+    --card:#FAF8F0;
+    --shadow:0 1px 2px rgba(38,36,28,.06),0 8px 24px rgba(38,36,28,.07);
+    --radius:3px;
+    --serif:"Palatino Linotype",Palatino,"Book Antiqua","Iowan Old Style",Georgia,serif;
+    --sans:"Seravek","Gill Sans","Segoe UI","Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ground:#191C16;
+      --panel:#20241D;
+      --ink:#E9E5D4;
+      --ink-soft:#A9A490;
+      --line:#3B4034;
+      --line-soft:#2E322A;
+      --fern:#8FAE85;
+      --fern-deep:#A9C69E;
+      --moss:#7E9268;
+      --clay:#D98A5C;
+      --clay-soft:#7A4C2E;
+      --card:#22261F;
+      --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 24px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#191C16;
+    --panel:#20241D;
+    --ink:#E9E5D4;
+    --ink-soft:#A9A490;
+    --line:#3B4034;
+    --line-soft:#2E322A;
+    --fern:#8FAE85;
+    --fern-deep:#A9C69E;
+    --moss:#7E9268;
+    --clay:#D98A5C;
+    --clay-soft:#7A4C2E;
+    --card:#22261F;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 8px 24px rgba(0,0,0,.3);
+  }
+  :root[data-theme="light"]{
+    --ground:#F4F2E9;
+    --panel:#EDEADD;
+    --ink:#26241C;
+    --ink-soft:#5C594B;
+    --line:#CFC9B4;
+    --line-soft:#DEDACA;
+    --fern:#3E5C40;
+    --fern-deep:#2E4630;
+    --moss:#6B7F58;
+    --clay:#B85F33;
+    --clay-soft:#D9B29A;
+    --card:#FAF8F0;
+    --shadow:0 1px 2px rgba(38,36,28,.06),0 8px 24px rgba(38,36,28,.07);
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+  body{
+    margin:0;
+    background:var(--ground);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:16px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--fern);text-decoration:none}
+  a:hover{text-decoration:underline}
+  button{font-family:inherit}
+  :focus-visible{outline:2px solid var(--clay);outline-offset:2px}
+
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+
+  /* ---------- header ---------- */
+  header.site{
+    border-bottom:1px solid var(--line);
+    background:var(--ground);
+  }
+  .site-inner{
+    display:flex;align-items:baseline;justify-content:space-between;
+    gap:24px;padding:20px 0;flex-wrap:wrap;
+  }
+  .wordmark{
+    font-family:var(--serif);font-size:1.35rem;letter-spacing:.01em;color:var(--ink);
+  }
+  .wordmark b{font-weight:700}
+  .wordmark .tld{color:var(--clay)}
+  .site-nav{display:flex;gap:22px;flex-wrap:wrap}
+  .site-nav a{
+    font-size:.82rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);
+  }
+  .site-nav a:hover{color:var(--fern);text-decoration:none}
+
+  /* ---------- hero ---------- */
+  .hero{
+    display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;
+    padding:72px 0 64px;
+  }
+  .eyebrow{
+    font-size:.78rem;text-transform:uppercase;letter-spacing:.18em;
+    color:var(--clay);margin:0 0 18px;
+  }
+  .hero h1{
+    font-family:var(--serif);font-weight:600;
+    font-size:clamp(2.1rem,4.6vw,3.4rem);
+    line-height:1.12;margin:0 0 20px;text-wrap:balance;
+  }
+  .hero h1 em{font-style:italic;color:var(--fern)}
+  .hero p.lede{
+    font-size:1.08rem;color:var(--ink-soft);max-width:34em;margin:0 0 30px;
+  }
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap}
+  .btn{
+    display:inline-block;padding:12px 22px;border-radius:var(--radius);
+    font-size:.92rem;letter-spacing:.02em;border:1px solid transparent;cursor:pointer;
+  }
+  .btn-primary{background:var(--fern);color:var(--ground)}
+  .btn-primary:hover{background:var(--fern-deep);text-decoration:none;color:var(--ground)}
+  :root[data-theme="dark"] .btn-primary,
+  :root[data-theme="dark"] .btn-primary:hover{color:#151812}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .btn-primary,
+    :root:not([data-theme="light"]) .btn-primary:hover{color:#151812}
+  }
+  .btn-ghost{border-color:var(--line);color:var(--ink)}
+  .btn-ghost:hover{border-color:var(--fern);color:var(--fern);text-decoration:none}
+
+  .plan-fig{margin:0}
+  .plan-frame{
+    border:1px solid var(--line);background:var(--card);
+    border-radius:var(--radius);box-shadow:var(--shadow);padding:10px;
+  }
+  .plan-frame canvas{display:block;width:100%;height:auto;border:1px solid var(--line-soft)}
+  .plan-fig figcaption{
+    display:flex;justify-content:space-between;gap:12px;
+    font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);
+    padding:10px 4px 0;letter-spacing:.03em;
+  }
+
+  /* ---------- stats strip ---------- */
+  .stats{
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+    background:var(--panel);
+  }
+  .stats-inner{
+    display:grid;grid-template-columns:repeat(4,1fr);
+  }
+  .stat{
+    padding:26px 24px;border-left:1px solid var(--line);
+  }
+  .stat:first-child{border-left:none}
+  .stat .num{
+    font-family:var(--serif);font-size:2rem;line-height:1;color:var(--fern);
+    font-variant-numeric:tabular-nums;
+  }
+  .stat .lbl{
+    font-size:.78rem;text-transform:uppercase;letter-spacing:.14em;
+    color:var(--ink-soft);margin-top:8px;
+  }
+
+  /* ---------- how it works ---------- */
+  .how{padding:72px 0 24px}
+  .sec-head{max-width:46em;margin:0 0 40px}
+  .sec-head h2{
+    font-family:var(--serif);font-weight:600;font-size:clamp(1.6rem,3vw,2.2rem);
+    margin:0 0 12px;text-wrap:balance;
+  }
+  .sec-head p{color:var(--ink-soft);margin:0}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+  .step{
+    border-top:2px solid var(--fern);padding-top:18px;
+  }
+  .step .step-no{
+    font-family:var(--mono);font-size:.75rem;color:var(--clay);letter-spacing:.08em;
+  }
+  .step h3{font-family:var(--serif);font-weight:600;font-size:1.15rem;margin:8px 0 8px}
+  .step p{font-size:.93rem;color:var(--ink-soft);margin:0}
+
+  /* ---------- catalog ---------- */
+  .catalog{padding:64px 0 80px}
+  .cat-nav{
+    position:sticky;top:0;z-index:5;
+    background:var(--ground);
+    border-bottom:1px solid var(--line);
+    padding:12px 0;
+    display:flex;gap:8px;overflow-x:auto;
+    scrollbar-width:thin;
+  }
+  .cat-nav a{
+    flex:0 0 auto;font-family:var(--mono);font-size:.74rem;letter-spacing:.04em;
+    color:var(--ink-soft);border:1px solid var(--line);border-radius:999px;
+    padding:5px 13px;white-space:nowrap;
+  }
+  .cat-nav a:hover{color:var(--fern);border-color:var(--fern);text-decoration:none}
+  .cat-section{padding:52px 0 8px;scroll-margin-top:70px}
+  .cat-head{
+    display:flex;align-items:baseline;gap:16px;border-bottom:1px solid var(--line);
+    padding-bottom:12px;margin-bottom:8px;flex-wrap:wrap;
+  }
+  .cat-head .cat-no{
+    font-family:var(--mono);font-size:.78rem;color:var(--clay);letter-spacing:.06em;
+  }
+  .cat-head h2{
+    font-family:var(--serif);font-weight:600;font-size:1.5rem;margin:0;
+  }
+  .cat-head .cat-count{
+    margin-left:auto;font-family:var(--mono);font-size:.74rem;color:var(--ink-soft);
+  }
+  .cat-blurb{color:var(--ink-soft);font-size:.95rem;max-width:44em;margin:10px 0 26px}
+  .grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:0;padding:0;list-style:none;
+  }
+  .skill-card{
+    text-align:left;width:100%;
+    background:var(--card);border:1px solid var(--line-soft);border-radius:var(--radius);
+    padding:16px 16px 14px;cursor:pointer;color:var(--ink);
+    display:flex;flex-direction:column;gap:6px;
+    transition:border-color .15s ease,transform .15s ease,box-shadow .15s ease;
+  }
+  .skill-card:hover{
+    border-color:var(--fern);transform:translateY(-2px);box-shadow:var(--shadow);
+  }
+  .skill-card .sk-no{
+    font-family:var(--mono);font-size:.68rem;color:var(--clay);letter-spacing:.06em;
+  }
+  .skill-card h3{
+    font-family:var(--serif);font-weight:600;font-size:1.02rem;margin:0;line-height:1.3;
+  }
+  .skill-card p{
+    font-size:.84rem;color:var(--ink-soft);margin:0;line-height:1.5;
+  }
+
+  /* ---------- modal ---------- */
+  .modal-backdrop{
+    position:fixed;inset:0;background:rgba(24,23,17,.55);
+    display:none;align-items:center;justify-content:center;padding:20px;z-index:50;
+  }
+  .modal-backdrop.open{display:flex}
+  .modal{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    max-width:560px;width:100%;max-height:88vh;overflow-y:auto;
+    box-shadow:0 24px 64px rgba(0,0,0,.28);
+    padding:28px 30px 26px;position:relative;
+  }
+  .modal .m-eyebrow{
+    font-family:var(--mono);font-size:.72rem;color:var(--clay);letter-spacing:.08em;margin:0 0 10px;
+  }
+  .modal h3{
+    font-family:var(--serif);font-weight:600;font-size:1.6rem;margin:0 0 10px;line-height:1.2;
+    padding-right:36px;text-wrap:balance;
+  }
+  .modal .m-desc{color:var(--ink-soft);font-size:.97rem;margin:0 0 22px}
+  .modal .m-label{
+    font-size:.72rem;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-soft);
+    margin:0 0 8px;
+  }
+  .prompt-box{
+    display:flex;gap:12px;align-items:flex-start;
+    background:var(--panel);border:1px solid var(--line-soft);border-left:3px solid var(--fern);
+    border-radius:var(--radius);padding:14px 16px;margin:0 0 22px;
+  }
+  .prompt-box p{
+    font-family:var(--mono);font-size:.82rem;line-height:1.55;margin:0;flex:1;
+  }
+  .copy-btn{
+    flex:0 0 auto;border:1px solid var(--line);background:transparent;color:var(--ink-soft);
+    border-radius:var(--radius);font-size:.72rem;padding:5px 10px;cursor:pointer;
+    letter-spacing:.06em;text-transform:uppercase;
+  }
+  .copy-btn:hover{border-color:var(--fern);color:var(--fern)}
+  .related{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 4px}
+  .related button{
+    border:1px solid var(--line);background:transparent;color:var(--ink);
+    border-radius:999px;font-size:.78rem;padding:5px 13px;cursor:pointer;
+  }
+  .related button:hover{border-color:var(--fern);color:var(--fern)}
+  .modal-close{
+    position:absolute;top:16px;right:16px;
+    border:1px solid var(--line);background:transparent;color:var(--ink-soft);
+    width:32px;height:32px;border-radius:var(--radius);cursor:pointer;font-size:1rem;line-height:1;
+  }
+  .modal-close:hover{border-color:var(--clay);color:var(--clay)}
+
+  /* ---------- footer ---------- */
+  footer.site{
+    border-top:1px solid var(--line);background:var(--panel);
+  }
+  .foot-inner{
+    display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    padding:32px 0;font-size:.83rem;color:var(--ink-soft);
+  }
+  .foot-inner .wordmark{font-size:1rem}
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 900px){
+    .hero{grid-template-columns:1fr;gap:40px;padding:52px 0 48px}
+    .stats-inner{grid-template-columns:repeat(2,1fr)}
+    .stat{border-left:none;border-top:1px solid var(--line)}
+    .stat:nth-child(-n+2){border-top:none}
+    .stat:nth-child(even){border-left:1px solid var(--line)}
+    .steps{grid-template-columns:1fr}
+    .grid{grid-template-columns:repeat(2,1fr)}
+  }
+  @media (max-width: 560px){
+    .grid{grid-template-columns:1fr}
+    .stats-inner{grid-template-columns:1fr}
+    .stat{border-left:none!important;border-top:1px solid var(--line)}
+    .stat:first-child{border-top:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap site-inner">
+    <div class="wordmark"><b>Design</b>Agent<span class="tld">.ai</span></div>
+    <nav class="site-nav" aria-label="Site">
+      <a href="#how">How it works</a>
+      <a href="#catalog">Skill catalog</a>
+      <a href="#footer">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="wrap hero">
+    <div>
+      <p class="eyebrow">DesignAgent.ai &times; NoblePort</p>
+      <h1>One agent. A hundred and fifty ways to <em>shape a plot</em>.</h1>
+      <p class="lede">
+        DesignAgent is an AI landscape designer built for NoblePort properties.
+        It reads your plot — soil, sun, slope, setbacks — and answers with real
+        design work: zone diagrams, planting palettes, grading plans, and the
+        schedules to build them. Every capability is a named skill you can
+        invoke directly.
+      </p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#catalog">Browse all 150 skills</a>
+        <a class="btn btn-ghost" href="#how">How it works</a>
+      </div>
+    </div>
+    <figure class="plan-fig">
+      <div class="plan-frame">
+        <canvas id="plan" width="860" height="640" aria-label="Stylized landscape plot plan, generated as a line drawing"></canvas>
+      </div>
+      <figcaption>
+        <span>PLOT 7 &middot; NOBLEPORT QUAY</span>
+        <span>SCALE 1:200 &middot; SHEET L-01</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="stats" aria-label="At a glance">
+    <div class="wrap stats-inner">
+      <div class="stat"><div class="num" id="stat-skills">150</div><div class="lbl">Named skills</div></div>
+      <div class="stat"><div class="num" id="stat-cats">10</div><div class="lbl">Disciplines covered</div></div>
+      <div class="stat"><div class="num">1:200</div><div class="lbl">Plan-sheet precision</div></div>
+      <div class="stat"><div class="num">Survey&rarr;Handover</div><div class="lbl">Full project arc</div></div>
+    </div>
+  </section>
+
+  <section class="wrap how" id="how">
+    <div class="sec-head">
+      <h2>From a rough plot to a working plan, in three moves</h2>
+      <p>You never have to know which of the 150 skills to reach for — describe
+      the plot and the goal, and DesignAgent routes the work. Or call a skill
+      by name when you know exactly what you need.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-no">STEP 01</span>
+        <h3>Describe your plot</h3>
+        <p>Address, survey, photos, or a sketch on a napkin. DesignAgent builds
+        a base map of existing conditions — boundaries, levels, trees, services.</p>
+      </div>
+      <div class="step">
+        <span class="step-no">STEP 02</span>
+        <h3>Set the brief</h3>
+        <p>&ldquo;Low-water front garden with a gravel court.&rdquo; The agent
+        selects and sequences the right skills — analysis first, then layout,
+        planting, and detail.</p>
+      </div>
+      <div class="step">
+        <span class="step-no">STEP 03</span>
+        <h3>Get buildable output</h3>
+        <p>Scaled drawings, plant schedules with quantities, phased budgets, and
+        contractor-ready briefs — not just pretty pictures.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap catalog" id="catalog">
+    <div class="sec-head">
+      <h2>The skill catalog</h2>
+      <p>Every skill is listed the way it appears on a plan sheet: numbered,
+      named, and scoped to one job. Select any card for the full brief and an
+      example prompt.</p>
+    </div>
+    <nav class="cat-nav" id="cat-nav" aria-label="Skill categories"></nav>
+    <div id="catalog-body"></div>
+  </section>
+</main>
+
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal">
+    <button class="modal-close" id="modal-close" aria-label="Close skill details">&times;</button>
+    <p class="m-eyebrow" id="modal-eyebrow"></p>
+    <h3 id="modal-title"></h3>
+    <p class="m-desc" id="modal-desc"></p>
+    <p class="m-label">Example prompt</p>
+    <div class="prompt-box">
+      <p id="modal-prompt"></p>
+      <button class="copy-btn" id="copy-btn">Copy</button>
+    </div>
+    <p class="m-label">Related skills in this discipline</p>
+    <div class="related" id="modal-related"></div>
+  </div>
+</div>
+
+<footer class="site" id="footer">
+  <div class="wrap foot-inner">
+    <div>
+      <div class="wordmark"><b>Design</b>Agent<span class="tld">.ai</span></div>
+      <div>An AI landscape design agent for NoblePort plots.</div>
+    </div>
+    <div>
+      Concept catalog &middot; <span id="foot-count"></span> skills across
+      <span id="foot-cats"></span> disciplines &middot; NoblePort
+    </div>
+  </div>
+</footer>
+
+<script>
+"use strict";
+
+/* ============ skill data ============
+   Each category: {t: title, b: blurb, s: [[name, imperative description], ...]}
+   Descriptions are imperative so example prompts can be composed from them. */
+const CATS = [
+{t:"Site & Survey", b:"Before anything is drawn, the plot has to be understood. These skills turn a raw parcel into a measured, legible base map.", s:[
+["Plot Boundary Mapper","Trace legal boundaries from survey data or parcel records into a working base plan"],
+["Sun Path Analyzer","Model seasonal sun and shade across the plot, hour by hour"],
+["Soil Profile Reader","Interpret soil test results into texture, pH, and planting guidance"],
+["Slope & Aspect Scanner","Compute gradients and facing directions across the whole site"],
+["Drainage Pattern Auditor","Map where water collects, pools, and flows after rain"],
+["Wind Exposure Study","Chart prevailing winds and identify natural shelter zones"],
+["Microclimate Finder","Locate frost pockets, heat traps, and rain shadows on the plot"],
+["Existing Tree Inventory","Catalog existing trees with species, condition, and keep-or-remove advice"],
+["View Corridor Analyzer","Identify sightlines worth framing and eyesores worth screening"],
+["Noise & Privacy Auditor","Pinpoint intrusion points that need buffering or screening"],
+["Utility Line Locator","Flag easements, buried services, and no-dig zones"],
+["Legacy Feature Assessor","Evaluate existing walls, paths, and structures for reuse"],
+["Frost Date Advisor","Pull the hardiness zone and first and last frost windows for the site"],
+["Site Photo Interpreter","Extract site conditions and measurements from uploaded photos"],
+["Base Map Builder","Assemble a to-scale base plan of all existing conditions"]
+]},
+{t:"Layout & Zoning", b:"The bones of a garden: how space is divided, how people move through it, and where each function lives.", s:[
+["Zone Diagram Generator","Divide the plot into functional zones sized to how you actually live"],
+["Circulation Planner","Route primary and secondary paths along natural desire lines"],
+["Proportion Grid Composer","Proportion beds, lawns, and terraces on a harmonious grid"],
+["Outdoor Room Designer","Compose enclosed garden rooms with thresholds and ceilings of canopy"],
+["Focal Point Placer","Position specimen trees and features where the eye lands first"],
+["Entry Sequence Designer","Choreograph the arrival from street edge to front door"],
+["Lawn Shape Optimizer","Balance turf area against beds and hardscape for easy care"],
+["Play Zone Planner","Site play areas with sightlines from the kitchen and soft landings"],
+["Pet-Friendly Layout","Plan durable routes and zones that stand up to dogs"],
+["Edible Garden Plotter","Site kitchen gardens for six hours of sun and short trips to the door"],
+["Courtyard Composer","Squeeze light, greenery, and seating into enclosed courts"],
+["Narrow Lot Specialist","Unlock long, tight urban plots with layered cross-axes"],
+["Corner Lot Strategist","Resolve double frontages with privacy and curb presence"],
+["Acreage Master Planner","Phase large rural properties into a coherent long-term plan"],
+["Accessibility Auditor","Check every route and grade against universal design standards"]
+]},
+{t:"Planting Design", b:"Species selection and composition — the living layer, chosen for this soil, this climate, and the way light moves across the plot.", s:[
+["Planting Palette Curator","Select a plant palette matched to climate, soil, and style"],
+["Bloom Sequence Planner","Stagger flowering so color runs continuously through the seasons"],
+["Native Species Matcher","Match locally native species to each condition on the plot"],
+["Layered Border Builder","Compose borders in height tiers from groundcover to canopy"],
+["Tree Placement Advisor","Site shade trees clear of foundations, drains, and future views"],
+["Hedge & Screen Selector","Choose hedging by target height, density, and clipping appetite"],
+["Groundcover Strategist","Replace bare mulch and problem lawn with living groundcover"],
+["Pollinator Garden Designer","Design nectar-rich planting that feeds pollinators all season"],
+["Shade Garden Specialist","Build lush planting plans for dry shade and deep shade"],
+["Drought-Tolerant Palette","Curate low-water planting that still reads green and generous"],
+["Color Theory Mixer","Build color schemes from foliage and bloom, not bloom alone"],
+["Texture Contrast Composer","Pair bold and fine foliage for contrast that outlasts flowers"],
+["Plant Spacing Calculator","Calculate mature-size spacing and exact plant quantities per bed"],
+["Succession Planting Scheduler","Schedule sowing and replanting so beds never sit empty"],
+["Container Grouping Designer","Compose container clusters for entries, terraces, and balconies"]
+]},
+{t:"Hardscape & Structures", b:"The built layer — surfaces, walls, and shelters that give the garden its permanent architecture.", s:[
+["Patio Dimension Planner","Size terraces around real furniture and real circulation space"],
+["Path Material Selector","Choose path materials by traffic, budget, and garden character"],
+["Retaining Wall Designer","Design retaining walls with correct batter, drainage, and footing"],
+["Deck Layout Generator","Lay out decks with framing direction, board pattern, and stairs"],
+["Pergola & Shade Designer","Design pergolas and shade structures sized to their space"],
+["Outdoor Kitchen Planner","Plan outdoor kitchens with work triangle, utilities, and clearances"],
+["Fire Feature Designer","Site fire pits and fireplaces with setbacks and seating circles"],
+["Fence & Gate Stylist","Match fence and gate designs to architecture and privacy needs"],
+["Steps & Terrace Calculator","Calculate riser-tread rhythms for comfortable garden steps"],
+["Driveway Layout Optimizer","Lay out drives with turning radii, parking, and guest space"],
+["Edging Detail Library","Specify bed and lawn edging details that hold their line"],
+["Paving Pattern Generator","Generate paving bonds and joint patterns to scale"],
+["Seating Wall Planner","Double retaining and border walls as built-in seating"],
+["Shed & Studio Siting","Site sheds and garden studios for access, light, and permits"],
+["Sports Court Fitter","Fit game courts and putting greens into leftover level ground"]
+]},
+{t:"Water & Irrigation", b:"Water in both directions: delivering it efficiently to the planting, and celebrating it as pond, rill, and fountain.", s:[
+["Irrigation Zone Mapper","Group planting into irrigation zones by water demand"],
+["Drip System Designer","Design drip lines with emitter spacing and flow calculations"],
+["Rainwater Harvest Calculator","Size tanks and barrels against roof area and local rainfall"],
+["Pond Designer","Design ponds with shelves, liner specs, and healthy proportions"],
+["Fountain Selector","Choose fountains scaled to their courtyard or border setting"],
+["Stream & Waterfall Builder","Route naturalistic streams and falls across a grade change"],
+["Pool Surround Planner","Plan pool decks, fencing lines, and splash-tolerant planting"],
+["Rain Garden Designer","Design planted basins that soak up roof and driveway runoff"],
+["Watering Schedule Optimizer","Build seasonal watering schedules by zone and soil type"],
+["Greywater Reuse Planner","Route laundry and shower water safely to thirsty planting"],
+["Swale Router","Route gentle swales that slow, spread, and sink stormwater"],
+["Water Budget Auditor","Audit total landscape water use against a target budget"],
+["Winterization Advisor","Plan blow-outs and shut-downs before the first hard freeze"],
+["Smart Controller Configurator","Configure weather-based controllers zone by zone"],
+["Aquatic Planting Guide","Plant ponds and margins in the correct depth zones"]
+]},
+{t:"Terrain & Grading", b:"Moving earth is the most expensive line on the budget — these skills make every cut and fill count.", s:[
+["Cut & Fill Balancer","Balance cut and fill so soil never leaves the site"],
+["Contour Reshaper","Reshape contours to create usable level ground gracefully"],
+["Terrace Sequence Planner","Break a slope into a sequence of livable terraces"],
+["Berm Designer","Shape berms for screening, sound, and planting height"],
+["Erosion Control Strategist","Stabilize disturbed ground before the first storm"],
+["French Drain Router","Route subsurface drains to intercept water before it reaches walls"],
+["Grading Plan Generator","Produce a spot-elevation grading plan from the design"],
+["Slope Stabilization Palette","Select deep-rooted planting that knits slopes together"],
+["Sunken Garden Designer","Carve sheltered sunken gardens with resolved drainage"],
+["Rockery Composer","Compose rock outcrops and mounds that read as natural"],
+["Level Change Resolver","Resolve awkward grade changes at doors, gates, and boundaries"],
+["Soil Import Calculator","Calculate topsoil and amendment volumes by bed and depth"],
+["Foundation Drainage Guard","Grade ground to shed water away from every structure"],
+["Hillside Path Router","Route hillside paths at comfortable grades with switchbacks"],
+["Earthwork Cost Estimator","Estimate earthwork costs from the grading plan"]
+]},
+{t:"Light & Atmosphere", b:"The garden after five o'clock: light, scent, and sound, designed with the same rigor as the planting plan.", s:[
+["Path Lighting Planner","Light paths and steps evenly without runway glare"],
+["Uplighting Composer","Uplight specimen trees and facades for nighttime depth"],
+["Moonlighting Designer","Cast soft downlight through canopies for a moonlit floor"],
+["Task Lighting Mapper","Put working light exactly where cooking and stairs need it"],
+["Water Feature Illuminator","Light ponds and fountains from angles that avoid glare"],
+["Dark Sky Compliance","Keep the lighting plan shielded, warm, and dark-sky legal"],
+["Fixture Style Curator","Match fixture families to the garden's architecture"],
+["Low-Voltage Circuit Sizer","Size transformers and runs so the last fixture burns bright"],
+["Scene Programmer","Program evening, entertaining, and security lighting scenes"],
+["Shadow Play Designer","Compose deliberate shadows on walls and paving"],
+["Fragrance Trail Planner","Sequence scented planting along the routes people walk"],
+["Sound Garden Composer","Layer rustling grasses and moving water to mask street noise"],
+["Evening Garden Palette","Choose white and silver planting that glows at dusk"],
+["Fire & Candle Zones","Plan safe zones for firelight, candles, and lanterns"],
+["Seasonal Light Scheduler","Shift lighting schedules with the seasons automatically"]
+]},
+{t:"Ecology & Sustainability", b:"Design that gives more than it takes: habitat, cooler streets, cleaner runoff, and less to mow.", s:[
+["Habitat Corridor Designer","Connect planting into corridors wildlife can actually travel"],
+["Bird & Wildlife Garden","Design food, water, and cover for year-round wildlife"],
+["Meadow Conversion Planner","Convert tired lawn into managed meadow in staged phases"],
+["Lawn Reduction Strategist","Shrink lawn to the useful core and replant the rest"],
+["Compost System Siting","Site compost systems for access, airflow, and neighbors"],
+["Carbon-Smart Plant Picks","Favor long-lived, low-input planting that stores carbon"],
+["Permeable Surface Advisor","Swap sealed surfaces for permeable ones that drink rain"],
+["Invasive Species Screener","Screen every plant list against regional invasive registers"],
+["Integrated Pest Planner","Manage pests with habitat and timing before chemicals"],
+["Soil Health Coach","Build living soil with mulch, roots, and minimal disturbance"],
+["Heat Island Cooler","Cool paved zones with canopy, albedo, and planting"],
+["Stormwater Credit Optimizer","Design rain features that qualify for stormwater credits"],
+["No-Mow Zone Mapper","Map the zones that never needed mowing in the first place"],
+["Wildlife Pond Specialist","Build ponds with shallow edges wildlife can use safely"],
+["Habitat Certification Checklist","Prepare the garden for habitat certification programs"]
+]},
+{t:"Visualization & Documents", b:"Design you can see and hand over: sketches, scaled sheets, schedules, and the documents a build runs on.", s:[
+["Concept Sketch Generator","Turn a brief into loose concept sketches for reaction"],
+["Scaled Plan Drafter","Draft the design as a dimensioned, to-scale plan sheet"],
+["3D Massing Preview","Preview the design as simple 3D massing from eye level"],
+["Seasonal Preview Renderer","Render the same view in spring, summer, fall, and winter"],
+["Before & After Composer","Compose before-and-after views from your site photos"],
+["Planting Plan Sheets","Produce planting plans with symbols, keys, and quantities"],
+["Section & Elevation Drawer","Draw sections through slopes, walls, and level changes"],
+["Material Board Builder","Assemble material and finish boards for approval"],
+["Mature Growth Simulator","Show the planting at year one, year five, and year fifteen"],
+["Walkthrough Storyboard","Storyboard the walk through the finished garden"],
+["Plant Schedule Exporter","Export plant schedules ready for nursery ordering"],
+["Dimension Annotator","Annotate plans with the dimensions a builder needs"],
+["Client Presentation Deck","Compile the design story into a presentation deck"],
+["Style Reference Curator","Curate reference imagery that pins down the intended style"],
+["Revision Comparator","Show exactly what changed between two design revisions"]
+]},
+{t:"Project & Compliance", b:"The unglamorous skills that get gardens built: permits, budgets, sequencing, and a clean handover.", s:[
+["Permit Requirement Scanner","Identify which parts of the design trigger permits"],
+["HOA Guideline Checker","Check the design against HOA and covenant rules"],
+["Setback & Height Verifier","Verify structures against setback and height limits"],
+["Budget Allocator","Split the budget across hardscape, planting, and contingency"],
+["Phasing Roadmap","Stage the build into phases that each stand alone"],
+["Contractor Brief Writer","Write scopes of work contractors can price accurately"],
+["Bid Comparison Analyzer","Compare contractor bids line by line for real differences"],
+["Materials Takeoff Calculator","Calculate material quantities from the drawings"],
+["Installation Sequencer","Sequence the install so no trade undoes another's work"],
+["Defensible Space Planner","Apply wildfire defensible-space zoning to the planting plan"],
+["Water Restriction Advisor","Adapt the design to current local watering restrictions"],
+["Maintenance Calendar Builder","Build a month-by-month care calendar for the finished garden"],
+["Timeline Estimator","Estimate a realistic start-to-finish construction timeline"],
+["Punch List Generator","Generate a completion punch list from the final walkthrough"],
+["Handover Package Builder","Compile plans, schedules, and care guides into one handover"]
+]}
+];
+
+/* ============ catalog rendering ============ */
+const pad3 = n => String(n).padStart(3,"0");
+const catalogBody = document.getElementById("catalog-body");
+const catNav = document.getElementById("cat-nav");
+const FLAT = []; // {no, name, desc, cat, ci, si}
+
+CATS.forEach((cat, ci) => {
+  const slug = "cat-" + (ci+1);
+  const a = document.createElement("a");
+  a.href = "#" + slug;
+  a.textContent = pad3(ci*15+1) + "–" + pad3(ci*15+cat.s.length) + " " + cat.t;
+  catNav.appendChild(a);
+
+  const sec = document.createElement("section");
+  sec.className = "cat-section";
+  sec.id = slug;
+
+  const head = document.createElement("div");
+  head.className = "cat-head";
+  head.innerHTML =
+    '<span class="cat-no">' + String(ci+1).padStart(2,"0") + "</span>" +
+    "<h2></h2>" +
+    '<span class="cat-count">' + cat.s.length + " skills</span>";
+  head.querySelector("h2").textContent = cat.t;
+  sec.appendChild(head);
+
+  const blurb = document.createElement("p");
+  blurb.className = "cat-blurb";
+  blurb.textContent = cat.b;
+  sec.appendChild(blurb);
+
+  const grid = document.createElement("ul");
+  grid.className = "grid";
+  cat.s.forEach((sk, si) => {
+    const no = FLAT.length + 1;
+    FLAT.push({no, name: sk[0], desc: sk[1], cat: cat.t, ci, si});
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.className = "skill-card";
+    btn.type = "button";
+    btn.setAttribute("data-no", no);
+    const noEl = document.createElement("span");
+    noEl.className = "sk-no";
+    noEl.textContent = "SKILL " + pad3(no);
+    const h3 = document.createElement("h3");
+    h3.textContent = sk[0];
+    const p = document.createElement("p");
+    p.textContent = sk[1] + ".";
+    btn.append(noEl, h3, p);
+    btn.addEventListener("click", () => openModal(no));
+    li.appendChild(btn);
+    grid.appendChild(li);
+  });
+  sec.appendChild(grid);
+  catalogBody.appendChild(sec);
+});
+
+document.getElementById("stat-skills").textContent = FLAT.length;
+document.getElementById("stat-cats").textContent = CATS.length;
+document.getElementById("foot-count").textContent = FLAT.length;
+document.getElementById("foot-cats").textContent = CATS.length;
+
+/* ============ modal ============ */
+const backdrop = document.getElementById("modal-backdrop");
+const modalEyebrow = document.getElementById("modal-eyebrow");
+const modalTitle = document.getElementById("modal-title");
+const modalDesc = document.getElementById("modal-desc");
+const modalPrompt = document.getElementById("modal-prompt");
+const modalRelated = document.getElementById("modal-related");
+const copyBtn = document.getElementById("copy-btn");
+let lastFocus = null;
+
+function promptFor(sk){
+  const d = sk.desc.charAt(0).toLowerCase() + sk.desc.slice(1);
+  return "DesignAgent, " + d + " for the plot at 7 Nobleport Quay.";
+}
+
+function openModal(no){
+  const sk = FLAT[no-1];
+  lastFocus = document.activeElement;
+  modalEyebrow.textContent = sk.cat.toUpperCase() + " · SKILL " + pad3(sk.no);
+  modalTitle.textContent = sk.name;
+  modalDesc.textContent = sk.desc + ". Part of the " + sk.cat +
+    " discipline — DesignAgent can run it alone or chain it with neighboring skills in a full design pass.";
+  modalPrompt.textContent = promptFor(sk);
+  copyBtn.textContent = "Copy";
+
+  modalRelated.innerHTML = "";
+  const siblings = CATS[sk.ci].s
+    .map((s, si) => ({si, name: s[0]}))
+    .filter(s => s.si !== sk.si);
+  // pick 3 nearest siblings
+  siblings.sort((a,b) => Math.abs(a.si-sk.si) - Math.abs(b.si-sk.si));
+  siblings.slice(0,3).forEach(s => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = s.name;
+    b.addEventListener("click", () => openModal(sk.ci*0 + FLAT.find(f => f.ci===sk.ci && f.si===s.si).no));
+    modalRelated.appendChild(b);
+  });
+
+  backdrop.classList.add("open");
+  document.body.style.overflow = "hidden";
+  document.getElementById("modal-close").focus();
+}
+
+function closeModal(){
+  backdrop.classList.remove("open");
+  document.body.style.overflow = "";
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+
+document.getElementById("modal-close").addEventListener("click", closeModal);
+backdrop.addEventListener("click", e => { if (e.target === backdrop) closeModal(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && backdrop.classList.contains("open")) closeModal();
+});
+copyBtn.addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText(modalPrompt.textContent);
+    copyBtn.textContent = "Copied";
+    setTimeout(() => { copyBtn.textContent = "Copy"; }, 1600);
+  } catch (_) {
+    copyBtn.textContent = "Select text";
+  }
+});
+
+/* ============ hero plot-plan canvas ============ */
+const canvas = document.getElementById("plan");
+const ctx = canvas.getContext("2d");
+
+function cssVar(name){
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function drawPlan(){
+  const W = canvas.width, H = canvas.height;
+  const ink = cssVar("--ink");
+  const soft = cssVar("--ink-soft");
+  const fern = cssVar("--fern");
+  const moss = cssVar("--moss");
+  const clay = cssVar("--clay");
+  const line = cssVar("--line");
+
+  ctx.clearRect(0,0,W,H);
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+
+  const m = 46; // margin inside canvas
+
+  // plot boundary: double line, like a title boundary on a survey
+  ctx.strokeStyle = ink;
+  ctx.lineWidth = 2;
+  ctx.strokeRect(m, m, W-2*m, H-2*m);
+  ctx.lineWidth = 0.8;
+  ctx.strokeRect(m+6, m+6, W-2*m-12, H-2*m-12);
+
+  // contour lines, upper-left corner (a graded rise)
+  ctx.strokeStyle = soft;
+  ctx.lineWidth = 0.9;
+  ctx.setLineDash([5,4]);
+  for (let i=0;i<5;i++){
+    ctx.beginPath();
+    const r = 70 + i*34;
+    ctx.arc(m+30, m+40, r, -0.1, 1.62);
+    ctx.stroke();
+  }
+  ctx.setLineDash([]);
+
+  // main lawn: soft organic blob, center-right
+  ctx.strokeStyle = moss;
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(W*0.42, H*0.62);
+  ctx.bezierCurveTo(W*0.40, H*0.36, W*0.60, H*0.24, W*0.75, H*0.33);
+  ctx.bezierCurveTo(W*0.88, H*0.41, W*0.87, H*0.66, W*0.73, H*0.75);
+  ctx.bezierCurveTo(W*0.58, H*0.84, W*0.44, H*0.80, W*0.42, H*0.62);
+  ctx.closePath();
+  ctx.stroke();
+  // hatch the lawn lightly
+  ctx.save();
+  ctx.clip();
+  ctx.strokeStyle = moss;
+  ctx.globalAlpha = 0.35;
+  ctx.lineWidth = 0.7;
+  for (let x=-H; x<W; x+=13){
+    ctx.beginPath();
+    ctx.moveTo(x, H);
+    ctx.lineTo(x+H, 0);
+    ctx.stroke();
+  }
+  ctx.restore();
+
+  // curving path from bottom edge into the plot (two parallel strokes)
+  ctx.strokeStyle = clay;
+  ctx.lineWidth = 1.8;
+  [0, 26].forEach(off => {
+    ctx.beginPath();
+    ctx.moveTo(W*0.30 + off, H - m);
+    ctx.bezierCurveTo(W*0.28 + off, H*0.72, W*0.20 + off*0.7, H*0.60, W*0.30 + off*0.8, H*0.44);
+    ctx.bezierCurveTo(W*0.36 + off*0.8, H*0.33, W*0.34 + off, H*0.26, W*0.44 + off, H*0.20);
+    ctx.stroke();
+  });
+  // paving joints across the path
+  ctx.lineWidth = 0.8;
+  for (let t=0.06; t<0.95; t+=0.09){
+    const y = H - m - t*(H - m - H*0.20);
+    const x1 = W*0.30 - (t*24) + Math.sin(t*6)*14;
+    ctx.beginPath();
+    ctx.moveTo(x1, y);
+    ctx.lineTo(x1+25, y-3);
+    ctx.stroke();
+  }
+
+  // trees: classic plan symbols — circle + radial ticks
+  function tree(x, y, r, col){
+    ctx.strokeStyle = col;
+    ctx.lineWidth = 1.4;
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.stroke();
+    ctx.lineWidth = 0.8;
+    for (let a=0; a<Math.PI*2; a+=Math.PI/7){
+      ctx.beginPath();
+      ctx.moveTo(x + Math.cos(a)*r*0.45, y + Math.sin(a)*r*0.45);
+      ctx.lineTo(x + Math.cos(a)*r*0.92, y + Math.sin(a)*r*0.92);
+      ctx.stroke();
+    }
+    ctx.fillStyle = col;
+    ctx.beginPath(); ctx.arc(x, y, 2.2, 0, Math.PI*2); ctx.fill();
+  }
+  tree(W*0.68, H*0.30, 52, fern);
+  tree(W*0.83, H*0.62, 38, fern);
+  tree(W*0.20, H*0.74, 44, fern);
+  tree(W*0.14, H*0.38, 30, moss);
+  tree(W*0.52, H*0.74, 26, moss);
+
+  // planting bed: scalloped edge along right boundary
+  ctx.strokeStyle = fern;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  const bx = W - m - 14;
+  ctx.moveTo(bx, m+20);
+  for (let y=m+20; y<H-m-20; y+=26){
+    ctx.quadraticCurveTo(bx-26, y+13, bx, y+26);
+  }
+  ctx.stroke();
+
+  // small terrace: rectangle grid near top-left
+  ctx.strokeStyle = soft;
+  ctx.lineWidth = 1;
+  const tx = W*0.40, ty = m+18, tw = 96, th = 66;
+  ctx.strokeRect(tx, ty, tw, th);
+  for (let i=1;i<4;i++){
+    ctx.beginPath(); ctx.moveTo(tx+i*tw/4, ty); ctx.lineTo(tx+i*tw/4, ty+th); ctx.stroke();
+  }
+  for (let i=1;i<3;i++){
+    ctx.beginPath(); ctx.moveTo(tx, ty+i*th/3); ctx.lineTo(tx+tw, ty+i*th/3); ctx.stroke();
+  }
+
+  // pond: small kidney near bottom-right of lawn
+  ctx.strokeStyle = clay;
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.ellipse(W*0.62, H*0.58, 30, 20, 0.4, 0, Math.PI*2);
+  ctx.stroke();
+  ctx.lineWidth = 0.7;
+  ctx.beginPath();
+  ctx.ellipse(W*0.62, H*0.58, 20, 12, 0.4, 0, Math.PI*2);
+  ctx.stroke();
+
+  // north arrow, top-right inside boundary
+  const nx = W - m - 44, ny = m + 46;
+  ctx.strokeStyle = ink;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.arc(nx, ny, 16, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(nx, ny+10); ctx.lineTo(nx, ny-12);
+  ctx.moveTo(nx-5, ny-5); ctx.lineTo(nx, ny-12); ctx.lineTo(nx+5, ny-5);
+  ctx.stroke();
+  ctx.fillStyle = ink;
+  ctx.font = "10px " + "monospace";
+  ctx.textAlign = "center";
+  ctx.fillText("N", nx, ny+30);
+
+  // scale bar, bottom-left inside boundary
+  const sx = m + 22, sy = H - m - 24;
+  ctx.strokeStyle = ink;
+  ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx+120, sy); ctx.stroke();
+  for (let i=0;i<=4;i++){
+    ctx.beginPath(); ctx.moveTo(sx+i*30, sy-4); ctx.lineTo(sx+i*30, sy+4); ctx.stroke();
+  }
+  ctx.fillStyle = soft;
+  ctx.textAlign = "left";
+  ctx.fillText("0        5       10 m", sx, sy+16);
+
+  // callout markers echoing the skill numbers
+  function callout(x, y, label){
+    ctx.strokeStyle = clay;
+    ctx.fillStyle = clay;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.arc(x, y, 11, 0, Math.PI*2); ctx.stroke();
+    ctx.textAlign = "center";
+    ctx.font = "9px monospace";
+    ctx.fillText(label, x, y+3);
+  }
+  callout(W*0.68, H*0.14, "021");
+  callout(W*0.90, H*0.44, "034");
+  callout(W*0.24, H*0.56, "047");
+}
+
+drawPlan();
+
+/* redraw when theme flips (toggle stamps data-theme; OS flips media query) */
+new MutationObserver(drawPlan).observe(document.documentElement, {attributes:true, attributeFilter:["data-theme"]});
+if (window.matchMedia){
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", drawPlan);
+}
+</script>
+</body>
+</html>
