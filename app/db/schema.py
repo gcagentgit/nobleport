@@ -57,6 +57,53 @@ def sqlite_schema() -> list[str]:
             updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
         )
         """,
+        """
+        CREATE TABLE IF NOT EXISTS voice_sessions (
+            session_id TEXT PRIMARY KEY,
+            thread_id TEXT NOT NULL,
+            mode TEXT NOT NULL,
+            avatar_state TEXT NOT NULL DEFAULT 'idle',
+            fallback_text INTEGER NOT NULL DEFAULT 0,
+            ended INTEGER NOT NULL DEFAULT 0,
+            created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+            updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS idx_voice_sessions_thread ON voice_sessions(thread_id)",
+        """
+        CREATE TABLE IF NOT EXISTS voice_transcripts (
+            id TEXT PRIMARY KEY,
+            session_id TEXT NOT NULL,
+            thread_id TEXT NOT NULL,
+            role TEXT NOT NULL,
+            content TEXT NOT NULL,
+            source TEXT NOT NULL,
+            request_id TEXT,
+            created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS idx_voice_transcripts_session ON voice_transcripts(session_id)",
+        "CREATE INDEX IF NOT EXISTS idx_voice_transcripts_thread ON voice_transcripts(thread_id)",
+        """
+        CREATE TABLE IF NOT EXISTS audit_chain (
+            seq INTEGER PRIMARY KEY AUTOINCREMENT,
+            audit_id TEXT NOT NULL UNIQUE,
+            prev_hash TEXT NOT NULL,
+            entry_hash TEXT NOT NULL,
+            event_type TEXT NOT NULL,
+            payload TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS idx_audit_chain_audit ON audit_chain(audit_id)",
+        """
+        CREATE TABLE IF NOT EXISTS launch_kill_switch (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            engaged INTEGER NOT NULL DEFAULT 0,
+            reason TEXT,
+            updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+        )
+        """,
     ]
 
 
@@ -105,6 +152,53 @@ def postgres_schema() -> list[str]:
             status TEXT NOT NULL,
             kill_requested BOOLEAN NOT NULL DEFAULT FALSE,
             last_event TEXT,
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS voice_sessions (
+            session_id TEXT PRIMARY KEY,
+            thread_id TEXT NOT NULL,
+            mode TEXT NOT NULL,
+            avatar_state TEXT NOT NULL DEFAULT 'idle',
+            fallback_text BOOLEAN NOT NULL DEFAULT FALSE,
+            ended BOOLEAN NOT NULL DEFAULT FALSE,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS idx_voice_sessions_thread ON voice_sessions(thread_id)",
+        """
+        CREATE TABLE IF NOT EXISTS voice_transcripts (
+            id TEXT PRIMARY KEY,
+            session_id TEXT NOT NULL,
+            thread_id TEXT NOT NULL,
+            role TEXT NOT NULL,
+            content TEXT NOT NULL,
+            source TEXT NOT NULL,
+            request_id TEXT,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS idx_voice_transcripts_session ON voice_transcripts(session_id)",
+        "CREATE INDEX IF NOT EXISTS idx_voice_transcripts_thread ON voice_transcripts(thread_id)",
+        """
+        CREATE TABLE IF NOT EXISTS audit_chain (
+            seq BIGSERIAL PRIMARY KEY,
+            audit_id TEXT NOT NULL UNIQUE,
+            prev_hash TEXT NOT NULL,
+            entry_hash TEXT NOT NULL,
+            event_type TEXT NOT NULL,
+            payload JSONB NOT NULL,
+            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS idx_audit_chain_audit ON audit_chain(audit_id)",
+        """
+        CREATE TABLE IF NOT EXISTS launch_kill_switch (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            engaged BOOLEAN NOT NULL DEFAULT FALSE,
+            reason TEXT,
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
         """,

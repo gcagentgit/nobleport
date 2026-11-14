@@ -81,10 +81,14 @@ def test_kill_creates_state_for_unknown_thread(client):
     assert s["kill_requested"] is True
 
 
-def test_metrics_gates_returns_summary(client):
+def test_metrics_latency_returns_summary(client):
+    """Latency lives at /metrics/latency now so /metrics/gates can carry the
+    voice launch gate status (voice/avatar/websocket/audit_log/database/
+    kill_switch) required by the Live Voice Launch Gate v1 spec.
+    """
     client.post("/agent/invoke", json={"input": "a", "thread_id": "t-api-m1"})
     client.post("/agent/invoke", json={"input": "b", "thread_id": "t-api-m2"})
-    r = client.get("/metrics/gates")
+    r = client.get("/metrics/latency")
     assert r.status_code == 200
     body = r.json()
     assert "agent_invoke_latency_ms" in body["metrics"]
