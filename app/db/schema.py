@@ -57,6 +57,28 @@ def sqlite_schema() -> list[str]:
             updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
         )
         """,
+        # Hermes WhatsApp consent — current state keyed by a one-way phone hash
+        # (never the raw number). See app.hermes.consent.
+        """
+        CREATE TABLE IF NOT EXISTS whatsapp_consent (
+            phone_hash TEXT PRIMARY KEY,
+            status TEXT NOT NULL,
+            source TEXT,
+            updated_at REAL NOT NULL
+        )
+        """,
+        # Immutable transition log so consent history is reconstructable.
+        """
+        CREATE TABLE IF NOT EXISTS whatsapp_consent_events (
+            id TEXT PRIMARY KEY,
+            phone_hash TEXT NOT NULL,
+            status TEXT NOT NULL,
+            source TEXT,
+            created_at REAL NOT NULL
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS idx_wa_consent_events_hash "
+        "ON whatsapp_consent_events(phone_hash)",
     ]
 
 
@@ -108,4 +130,26 @@ def postgres_schema() -> list[str]:
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
         """,
+        # Hermes WhatsApp consent — current state keyed by a one-way phone hash
+        # (never the raw number). See app.hermes.consent.
+        """
+        CREATE TABLE IF NOT EXISTS whatsapp_consent (
+            phone_hash TEXT PRIMARY KEY,
+            status TEXT NOT NULL,
+            source TEXT,
+            updated_at DOUBLE PRECISION NOT NULL
+        )
+        """,
+        # Immutable transition log so consent history is reconstructable.
+        """
+        CREATE TABLE IF NOT EXISTS whatsapp_consent_events (
+            id TEXT PRIMARY KEY,
+            phone_hash TEXT NOT NULL,
+            status TEXT NOT NULL,
+            source TEXT,
+            created_at DOUBLE PRECISION NOT NULL
+        )
+        """,
+        "CREATE INDEX IF NOT EXISTS idx_wa_consent_events_hash "
+        "ON whatsapp_consent_events(phone_hash)",
     ]

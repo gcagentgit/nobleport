@@ -60,6 +60,47 @@ pytest -q
 uvicorn app.api.app:app --reload
 ```
 
+## Hermes channel drivers (Slack / WhatsApp / Web Chat)
+
+**Status: APPROVED ARCHITECTURE BLUEPRINT / TARGET STATE IMPLEMENTATION —
+NOT VERIFIED.** The drivers are integrated against the repo's real audit/DB
+abstractions but ship with a non-production placeholder Core
+(`LocalEchoCore`). Live behaviour is pending NoblePort Core integration and
+audit evidence.
+
+`app/hermes/` adds channel ingress that all funnels through a single governed
+chokepoint, `HermesGateway`. Drivers never call NoblePort Core / Stephanie
+directly — the gateway is the only path, and it enforces:
+
+- **Identity + authority**: senders resolve to a role-scoped
+  `OperatorIdentity`. WRITE intents are rejected at the gateway for
+  read-only roles (Public / Customer).
+- **Audit-first**: every routed message and every rejected write is recorded
+  via the existing `audit_log` (`make_db_audit`) before Core is reached.
+- **No PII in audit/logs**: phone numbers are stored/logged only as a keyed
+  hash (`HERMES_PHONE_HASH_SALT`).
+
+| Channel  | Audience  | Controls |
+|----------|-----------|----------|
+| Slack    | Operators | Socket Mode; workspace (team) + channel allowlist; event dedup; DM-only default |
+| WhatsApp | Customers | Twilio signature verified; consent-gated (STOP/HELP/START); only opted-in numbers routed; outbound refused unless opted-in |
+| Web Chat | Public    | Read-only (WRITE stripped at ingress *and* rejected by the gateway); bounded per-session rate limit; idle-expiring sessions |
+
+Backends use the repo's abstractions where available: consent persists to
+Postgres/SQLite (`whatsapp_consent` + immutable `whatsapp_consent_events`),
+and web rate limiting uses Redis when `REDIS_URL` is set (bounded in-memory
+fallback otherwise, marked non-production for multi-replica). Slack/Twilio
+SDKs are optional (`requirements.txt`) and imported lazily — install only the
+channels you deploy. Inbound Twilio signature validation is stdlib-only.
+
+Configuration: see the Hermes block in `.env.example` (`app/hermes/config.py`
+loads it). Behind a TLS-terminating proxy, set `TWILIO_PUBLIC_BASE_URL` (or
+`TWILIO_TRUST_FORWARDED=true`) so signatures validate against the public URL.
+
+**Legal note**: consent/keyword handling (STOP/HELP/START, opt-in gating) are
+implementation safeguards, not a compliance attestation. TCPA / A2P 10DLC
+review gates remain required before customer rollout.
+
 ## Caveats
 
 - **LangGraph PostgresSaver**: the supervisor uses
